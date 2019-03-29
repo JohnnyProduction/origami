@@ -1,0 +1,71 @@
+body {
+    background: url("../img/origami2.png") repeat;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    margin: 0 auto;
+
+}
+
+@media screen and (min-width: 480px) and (max-width: 900px) {
+    body {
+        max-width: 480px;
+    }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1200px) {
+    body {
+        max-width: 900px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    body {
+        max-width: 1200px;
+    }
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex: 1 0 auto;
+    background-color: rgba(243, 125, 44, 0.85);
+}
+
+.footer {
+    display: flex;
+    flex-shrink: 0;
+    height: 100px;
+    background-color: #555;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    width: inherit;
+    height: 100px;
+    background-color: rgba(243, 240, 50, 0.85);
+    /*-webkit-box-shadow: 0 10px 6px -6px #777;*/
+    /*-moz-box-shadow: 0 10px 6px -6px #777;*/
+    /*box-shadow: 0 10px 6px -6px #777*/
+}
+
+/*.elements {*/
+    /*display: flex;*/
+    /*width: 180px;*/
+    /*height: 250px;*/
+    /*background-color: #fff;*/
+    /*margin: 25px;*/
+    /*box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);*/
+    /*border-radius: 20px;*/
+/*}*/
+
+
+

@@ -1,0 +1,49 @@
+html {
+    height: 100%;
+}
+
+body {
+    background: url("../img/origami2.png") repeat;
+    width: 100%;
+    min-height: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: 100px 1fr 100px;
+}
+
+@media screen and (min-width: 480px) and (max-width: 900px) {
+    body {
+        max-width: 480px;
+    }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1200px) {
+    body {
+        max-width: 900px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    body {
+        max-width: 1200px;
+    }
+}
+
+.header {
+    background-color: rgba(243, 240, 50, 0.85);
+}
+
+.content {
+    background-color: rgba(243, 125, 44, 0.85);
+}
+
+.footer {
+    background-color: rgba(29, 74, 243, 0.85);
+    grid-row: 3/4;
+}
+
+
+
+
+
+
