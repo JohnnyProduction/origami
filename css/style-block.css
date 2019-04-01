@@ -1,13 +1,12 @@
 html {
-    height: 100%;
     margin: 0;
+    height: 100%;
 }
 
 body {
     background: url("../img/origami2.png") repeat;
-    width: 100%;
-    min-height: 100%;
     margin: 0 auto;
+    height: 100%;
 
 }
 
@@ -35,15 +34,29 @@ body {
 }
 
 .content {
-    min-height: 80vh;
-    margin-bottom: -100px; /* Equal to height of footer and with accounting for margin-bottom of last child*/
+    min-height: calc(100% - 200px);
     background-color: rgba(243, 125, 44, 0.85);
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
 }
 
 .footer {
     height: 100px;
     background-color: rgba(29, 74, 243, 0.85);
 }
+
+/*.elements {*/
+    /*width: 180px;*/
+    /*height: 250px;*/
+    /*background-color: #fff;*/
+    /*margin: 25px;*/
+    /*box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);*/
+    /*border-radius: 20px;*/
+/*}*/
 
 
 
