@@ -11,7 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "hapi": "^18.1.0"
+    "hapi": "^18.1.0",
+    "sequelize": "^5.7.5",
+    "sqlite3": "^4.0.6"
   },
   "devDependencies": {
     "@types/hapi": "^18.0.1",

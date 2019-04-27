@@ -1,22 +1,22 @@
 import * as request from "supertest";
 import { CONFIG } from "./config";
-import { createServer } from "./server";
-import { Server } from "hapi";
+import { Server } from "./server";
+import { Database } from "./database";
 
-describe("createServer", () => {
-    let server: Server;
-
-    beforeEach(async () => {
-        server = createServer(CONFIG);
-        await server.start();
-    });
-    afterEach(async () => {
-        await server.stop();
-    });
-    it("Созданный сервер работает, отвечает 404 по не существующему поинту", async () => {
-        const response = await request
-            .agent(server.info.uri)
-            .get('/some-not-existing-point')
-            .expect(404);
+describe("Server", () => {
+    describe(".start", () => {
+        it("Сервер работает, отвечает 404 по не существующему поинту", async () => {
+            const database = new Database(CONFIG);
+            const server = new Server(CONFIG, [], database);
+            
+            await server.start();
+    
+            const response = await request
+                .agent(server.info.uri)
+                .get('/some-not-existing-point')
+                .expect(404);
+    
+            server.stop();  
+        });
     });
 });
