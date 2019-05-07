@@ -1,4 +1,3 @@
-import { CONFIG } from "./config";
 import { Server } from "./server";
 import { Database } from "./database";
 import { getRoutes } from "./routes";

@@ -9,10 +9,11 @@ export class Database {
             dialect: "sqlite",
             storage: config.sqlitePath,
         });
+
     }
 
     async open() {
-        // await this.sequelize.sync();
+        await this.sequelize.sync();
     }
 
     async close() {
