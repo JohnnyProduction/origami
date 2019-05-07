@@ -1,8 +1,6 @@
 import { Database } from "../database";
-import { initAutors } from "./autor";
-import { initCategories } from "./category";
+import { AutorModel } from "./autor";
 
-export const initModels = (database: Database) => {
-    initAutors(database);
-    // initCategories(database);
+export const initAllModels = (database: Database) => {
+    AutorModel.initialize(database);
 };

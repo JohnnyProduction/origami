@@ -11,5 +11,5 @@ export type IConfig = IDatabaseConfig & IServerConfig;
 export const CONFIG:IConfig = {
     host: "localhost",
     port: 8778,
-    sqlitePath: "test.sqlite",
+    sqlitePath: "./dev_db.sqlite",
 };

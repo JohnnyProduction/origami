@@ -6,14 +6,15 @@ import { AutorModel } from "../model/autor";
 
 describe("routes", () => {
     describe("autor", () => {
-        it("Сервер работает, отвечает Hello world", async () => {
+        it("Возвращает автора по id", async () => {
             const autorData = {
                 id: 5545,
                 name: "autor name",
                 avatar: "some url",
             }
             const server = await createTestServer(async (database: Database) => {
-                await AutorModel.create(autorData);
+                const autor: AutorModel = await AutorModel.create(autorData);
+                await autor.save();
             });
             
             await server.start();

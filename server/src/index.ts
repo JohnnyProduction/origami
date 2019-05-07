@@ -1,6 +1,8 @@
 import { Server } from "./server";
 import { Database } from "./database";
-import { getRoutes } from "./routes";
+import { getAllRoutes } from "./routes";
+import { CONFIG } from "./config";
+import { initAllModels } from "model";
 
 (async () => {
     process.on('unhandledRejection', (err: any) => {
@@ -10,7 +12,10 @@ import { getRoutes } from "./routes";
     });
 
     const database = new Database(CONFIG);
-    const server = new Server(CONFIG, getRoutes(database), database);
+
+    initAllModels(database);
+
+    const server = new Server(CONFIG, getAllRoutes(database), database);
 
     await server.start();
 
