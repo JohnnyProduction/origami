@@ -2,7 +2,7 @@ import { Server } from "./server";
 import { Database } from "./database";
 import { getAllRoutes } from "./routes";
 import { CONFIG } from "./config";
-import { initAllModels } from "model";
+import { initAllModels } from "./model";
 
 (async () => {
     process.on('unhandledRejection', (err: any) => {
