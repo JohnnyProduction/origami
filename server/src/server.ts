@@ -1,4 +1,4 @@
-import { Server as HapiServer } from "hapi";
+import { Server as HapiServer, ServerRoute } from "hapi";
 import { IServerConfig } from "config";
 import { Database } from "database";
 import { Route } from "routes/route";
@@ -22,7 +22,11 @@ export class Server {
             host: config.host,
         });
 
-        this.hapiServer.route(routes.map((route: Route) => route.getHapiRoute()));
+        this.hapiServer.route(
+            routes
+            .map((route: Route) => route.getHapiRoute())
+            .reduce((acc: ServerRoute[], cur: ServerRoute[]) => [...acc, ...cur], [])
+        );
     }
 
     public get info() {
@@ -34,12 +38,12 @@ export class Server {
             { plugin: inert },
             { plugin: vision },
             {
-                plugin: require('hapi-swaggered') as any,
+                plugin: require("hapi-swaggered") as any,
                 options: {
                     info: {
-                        title: 'Example API',
-                        description: 'Powered by node, hapi, joi, hapi-swaggered, hapi-swaggered-ui and swagger-ui',
-                        version: '1.0'
+                        title: "Origami API",
+                        description: "REST api для сайта origami",
+                        version: "0.0.1"
                     }
                 }
             },

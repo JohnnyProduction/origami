@@ -8,6 +8,7 @@ export class Database {
         this.sequelize = new Sequelize({
             dialect: "sqlite",
             storage: config.sqlitePath,
+            logging: false,
         });
 
     }

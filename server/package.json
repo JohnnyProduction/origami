@@ -6,11 +6,12 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch --runInBand"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hapi/joi": "^15.0.1",
     "hapi": "^18.1.0",
     "hapi-swaggered": "^3.0.3",
     "hapi-swaggered-ui": "^3.0.2",
@@ -24,6 +25,7 @@
     "@types/hapi": "^18.0.1",
     "@types/inert": "^5.1.2",
     "@types/jest": "^24.0.11",
+    "@types/joi": "^14.3.3",
     "@types/supertest": "^2.0.7",
     "@types/validator": "^10.11.0",
     "@types/vision": "^5.3.6",
