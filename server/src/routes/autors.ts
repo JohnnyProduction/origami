@@ -64,8 +64,8 @@ export class AutorsRoute extends Route {
                     notes: "Создает нового автора",
                     validate: {
                         query: {
-                            name: joi.string(),
-                            avatar: joi.string(),
+                            name: joi.string().required(),
+                            avatar: joi.string().required(),
                         }
                     }
                 },
@@ -127,7 +127,7 @@ export class AutorsRoute extends Route {
                 path: `${AutorsRoute.PATH}/{id}`,
                 options: {
                     tags: ["api"],
-                    description: "Удаляет автора оригами",
+                    description: "Удалить автора оригами",
                     notes: "Удаляет автора по id",
                     validate: {
                         params: {
