@@ -8,5 +8,5 @@ export abstract class Route {
         this.database = database;
     }
 
-    public abstract getHapiRoute(): ServerRoute[];
+    public abstract getHapiRoutes(): ServerRoute[];
 }

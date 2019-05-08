@@ -1,8 +1,8 @@
 import { Database } from "database";
-import { AutorRoute } from "./autor";
+import { AutorsRoute } from "./autors";
 
 export const getAllRoutes = (database: Database) => {
     return [
-        new AutorRoute(database),
+        new AutorsRoute(database),
     ];
 }

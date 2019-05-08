@@ -24,7 +24,7 @@ export class Server {
 
         this.hapiServer.route(
             routes
-            .map((route: Route) => route.getHapiRoute())
+            .map((route: Route) => route.getHapiRoutes())
             .reduce((acc: ServerRoute[], cur: ServerRoute[]) => [...acc, ...cur], [])
         );
     }
