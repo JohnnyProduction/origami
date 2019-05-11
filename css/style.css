@@ -1,4 +1,19 @@
-@import url('https://fonts.googleapis.com/css?family=Jura:400,600|Play');
+@font-face {
+    font-family: 'Jura-Bold';
+    src: url("../fonts/Jura/Jura-Bold.ttf");
+}
+@font-face {
+    font-family: 'Jura-Regular';
+    src: url("../fonts/Jura/Jura-Regular.ttf");
+}
+@font-face {
+    font-family: 'Jura-SemiBold';
+    src: url("../fonts/Jura/Jura-SemiBold.ttf");
+}
+@font-face {
+    font-family: 'Play-Regular';
+    src: url("../fonts/Play/Play-Regular.ttf");
+}
 
 body {
     display: flex;
@@ -31,15 +46,6 @@ body {
 }
 }
 
-a {
-    text-decoration: none;
-    color: black;
-}
-
-p {
-    font-family: 'Jura', sans-serif;
-}
-
 .content {
     display: flex;
     flex-direction: row;
@@ -59,7 +65,8 @@ p {
     background-color: #f5f5f5;
 }
 
-.footer p {
+.footer__text {
+    font-family: 'Jura-Regular', serif;
     margin: 40px 10%;
 }
 
@@ -120,23 +127,22 @@ p {
 .description {
     margin: 20px 0;
 }
-.description p {
-    display: inline;
-    font-size: 14px;
+
+.description span {
+    font-size: 16px;
     line-height: 25px;
-    font-family: 'Play', sans-serif;
+    font-family: 'Play-Regular', sans-serif;
 
 }
-.description p:first-child {
-    font-family: 'Jura', sans-serif;
+.description span:first-child {
+    font-family: 'Jura-SemiBold', sans-serif;
     font-size: 18px;
     font-weight: 400;
 }
 
-.description p:nth-child(2) {
-    font-family: 'Jura', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
+.description span:nth-child(2) {
+    font-family: 'Jura-Bold', sans-serif;
+    font-size: 20px;
 }
 
 .categories {
@@ -167,43 +173,40 @@ p {
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;
+    padding: 0;
 }
 
-.categories__title p {
-    font-size: 18px;
-    font-weight: bold;
+.categories__cell a {
+    text-decoration: none;
+    color: black;
 }
 
-.categories__cell p {
-    font-size: 16px;
-    font-weight: bold;
-}
 .categories__cell img {
     width: 71px;
     height: 100px;
+}
+
+.categories__name {
+    display: flex;
+    justify-content: center;
+    font-family: "Play-Regular", sans-serif;
 }
 .categories__button-more {
     width: 50px;
     height: 32px;
     margin: 15px auto;
+    border: none;
+    font-family: "Jura-Regular", sans-serif;
+    background-color: transparent;
 }
-.categories__button-more a {
+.categories__button-more:hover {
     color: black;
-    text-decoration: none;ф
+    text-decoration: none;
+    cursor: pointer;
 }
-.categories__button-more p {
-    text-align: center;
-    margin: 5px;
+
+.categories__title {
+    font-size: 20px;
+    font-family: 'Jura-Bold', sans-serif;
 }
-/*.elements {*/
-    /*display: flex;*/
-    /*width: 180px;*/
-    /*height: 250px;*/
-    /*background-color: #fff;*/
-    /*margin: 25px;*/
-    /*box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);*/
-    /*border-radius: 20px;*/
-/*}*/
-
-
 
