@@ -143,11 +143,12 @@ function getCategories(from, to, sort, filter) {
 
     return new Promise((resolve) => {
         setTimeout(() => resolve({
-        total: filtered.length,
-        from: from,
-        to: to,
-        payload: filtered.splice(from ,to),
-    }), 600);
+            total: filtered.length,
+            from: from,
+            to: to,
+            payload: filtered.splice(from ,to),
+        }), 600);
+    });
 }
 
 
