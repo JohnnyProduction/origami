@@ -5,12 +5,12 @@ import { parseNumberQuery, parseStringQuery } from "../utils/parse_query";
 const  joi = require("@hapi/joi");
 
 export class AutorsRoute extends Route {
-    static PATH = "/autors";
+    public PATH = "/autors";
     public getHapiRoutes(): ServerRoute[]{
         return [
             {
                 method: "GET",
-                path: `${AutorsRoute.PATH}/{id}`,
+                path: `${this.PATH}/{id}`,
                 options: {
                     tags: ["api"],
                     description: "Получить автора оригами",
@@ -39,7 +39,7 @@ export class AutorsRoute extends Route {
             },
             {
                 method: "GET",
-                path: AutorsRoute.PATH,
+                path: this.PATH,
                 options: {
                     tags: ["api"],
                     description: "Получить всех авторов оригами",
@@ -57,7 +57,7 @@ export class AutorsRoute extends Route {
             },
             {
                 method: "POST",
-                path: AutorsRoute.PATH,
+                path: this.PATH,
                 options: {
                     tags: ["api"],
                     description: "Создать автора оригами",
@@ -79,14 +79,14 @@ export class AutorsRoute extends Route {
                     return h.response(JSON.stringify({
                         meta: {
                             description: `Autor with name ${autor.name} was created`,
-                            ref: `${AutorsRoute.PATH}?id=${autor.id}`,
+                            ref: `${this.PATH}?id=${autor.id}`,
                         }
                     })).code(201).type("application/json");
                 },
             },
             {
                 method: "PUT",
-                path: `${AutorsRoute.PATH}/{id}`,
+                path: `${this.PATH}/{id}`,
                 options: {
                     tags: ["api"],
                     description: "Обновить автора оригами",
@@ -124,7 +124,7 @@ export class AutorsRoute extends Route {
             },
             {
                 method: "DELETE",
-                path: `${AutorsRoute.PATH}/{id}`,
+                path: `${this.PATH}/{id}`,
                 options: {
                     tags: ["api"],
                     description: "Удалить автора оригами",

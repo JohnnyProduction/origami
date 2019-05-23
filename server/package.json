@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "jest",
+    "test": "jest --runInBand",
     "test:watch": "npm run test -- --watch --runInBand"
   },
   "author": "",

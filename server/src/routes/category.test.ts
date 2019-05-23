@@ -1,24 +1,24 @@
 import * as request from "supertest";
 import { createTestServer, TestCRUDRoute } from "../utils/testing";
-import { AutorsRoute } from "./autors";
-import { Database } from "../database";
-import { AutorModel } from "../model/autor";
 import { Server } from "../server";
+import { CategoryModel } from "../model/category";
+import { CategoryRoute } from "./category";
 
 describe("routes", () => {
     TestCRUDRoute(
-        "Autor",
-        AutorModel,
-        AutorsRoute,
+        "Category",
+        CategoryModel,
+        CategoryRoute,
         () => ({
             id: 5545,
-            name: "autor name",
-            avatar: "some url",
+            name: "category name",
+            image: "some url",
+            rating: 4
         }),
-        "Autor",
-        ["name", "avatar"],
+        "Category",
+        ["name", "image", "rating"],
     );
-    describe("autors", () => {
+    describe("category", () => {
         let server: Server;
 
         afterEach(async () => {
@@ -27,40 +27,40 @@ describe("routes", () => {
             }
         });
         
-        it("Возвращает 404 с ошибкой если автора нет", async () => {  
-            const autorId = 6666;
+        it("Возвращает 404 с ошибкой если категории нет", async () => {  
+            const id = 6666;
             server = await createTestServer();
             
             await server.start();
             
             await request
                 .agent(server.info.uri)
-                .get(`${new AutorsRoute().PATH}/${autorId}`)
+                .get(`${new CategoryRoute().PATH}/${id}`)
                 .expect("Content-Type", /json/)
                 .expect(404, JSON.stringify({
                     error: {
-                        description: `Autor with id ${autorId} not found`,
+                        description: `Category with id ${id} not found`,
                         code: 404,
                     }
                 }));
         });
-        it("Должен вернуть 404 при обновлении не существующего автора", async () => {
+        it("Должен вернуть 404 при обновлении не существующей категории", async () => {
             server = await createTestServer();
  
             await server.start();
 
-            const newAutorData = {
+            const newData = {
                 id: 111,
-                name: "new autor name",
+                name: "new category name",
             };
     
             await request
                 .agent(server.info.uri)
-                .put(`${new AutorsRoute().PATH}/${newAutorData.id}?name=${newAutorData.name}`)
+                .put(`${new CategoryRoute().PATH}/${newData.id}?name=${newData.name}`)
                 .expect("Content-Type", /json/)
                 .expect(404, JSON.stringify({
                     error: {
-                        description: `Autor with id ${newAutorData.id} not found`,
+                        description: `Category with id ${newData.id} not found`,
                         code: 404,
                     }
                 }));
