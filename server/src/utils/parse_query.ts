@@ -15,3 +15,11 @@ export const parseStringQuery = (q: string | string[]): string => {
 
     return q + "";
 };
+
+export const parseBooleanQuery = (q: any): boolean => {
+    if(Array.isArray(q)) {
+        throw new Error(`Param ${q}  not be array`);
+    }
+
+    return !!q;
+};

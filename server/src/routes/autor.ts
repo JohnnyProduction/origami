@@ -4,8 +4,8 @@ import { AutorModel } from "../model/autor";
 import { parseNumberQuery, parseStringQuery } from "../utils/parse_query";
 const  joi = require("@hapi/joi");
 
-export class AutorsRoute extends Route {
-    public PATH = "/autors";
+export class AutorRoute extends Route {
+    public PATH = "/autor";
     public getHapiRoutes(): ServerRoute[]{
         return [
             {

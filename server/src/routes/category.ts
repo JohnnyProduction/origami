@@ -1,9 +1,10 @@
 import { Route, CRUDRoute } from "./route";
 import { ResponseToolkit, Request, ServerRoute } from "hapi";
-import { parseNumberQuery, parseStringQuery } from "../utils/parse_query";
+import { parseNumberQuery, parseStringQuery, parseBooleanQuery } from "../utils/parse_query";
 import { CategoryModel, ICategoryModel } from "../model/category";
-import { AutorsRoute } from "./autors";
+import { AutorRoute } from "./autor";
 import { AutorModel } from "../model/autor";
+import { Op } from "sequelize";
 const  joi = require("@hapi/joi");
 
 export class CategoryRoute extends CRUDRoute<ICategoryModel> {
@@ -122,5 +123,91 @@ export class CategoryRoute extends CRUDRoute<ICategoryModel> {
                 return h.response().code(200).type("application/json");
             },
         }
+    }
+
+    public getHapiRoutes() {
+        return [
+            ...super.getHapiRoutes(),
+            {
+                method: "GET",
+                path: `${this.PATH}/search`,
+                options: {
+                    tags: ["api"],
+                    description: "Постраничный поиск категории",
+                    notes: "Возвращает страницу заданного размера по поисковым параметрам",
+                    validate: {
+                        query: {
+                            from: joi.number().required(),
+                            to: joi.number().required(),
+                            sortField: joi.string().optional(),
+                            invertSort: joi.boolean().optional(),
+
+                            name: joi.string().optional(),
+                            image: joi.string().optional(),
+                            rating: joi.number().optional(),
+                        }
+                    }
+                },
+                handler: async (request: Request, h: ResponseToolkit, err?: Error) => {
+                    const from = parseNumberQuery(request.query.from);
+                    const to = parseNumberQuery(request.query.to);
+                    const sortField = request.query.sortField && parseStringQuery(request.query.sortField);
+                    const invertSort = request.query.invertSort && parseBooleanQuery(request.query.invertSort);
+                    
+                    const name = request.query.name && parseStringQuery(request.query.name);
+                    const image = request.query.image && parseStringQuery(request.query.image);
+                    const rating:any = request.query.rating && parseNumberQuery(request.query.rating);
+
+                    const filter:any = {};
+                    const sort:any = [];
+
+                    if (sortField) {
+                        if (invertSort) {
+                            sort.push([sortField, "DESC"]);
+                        } else {
+                            sort.push([sortField]);
+                        }
+                    }
+
+                    if (name) {
+                        filter["name"] = {
+                            [Op.like]: `%${name}%`,
+                        };
+                    }
+
+                    if (image) {
+                        filter["image"] = image;
+                    }
+
+                    if (Number.isInteger(rating)) {
+                        filter["rating"] = rating;
+                    }
+
+                    const options:any = {
+                        offset: from,
+                        limit: to - from,
+                        order: sort,
+                    }
+
+                    if (Object.keys(filter).length > 0) {
+                        options["where"] = filter;
+                    }
+
+                    const categories = await CategoryModel.findAll(options);
+                    const total = await CategoryModel.count({
+
+                    });
+    
+                    return h.response(JSON.stringify({
+                        from,
+                        to,
+                        total,
+                        items: categories.map(category => category.toPlain())
+                    }
+                        
+                    )).type("application/json");
+                },
+            },
+        ]
     }
 }

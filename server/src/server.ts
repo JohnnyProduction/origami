@@ -5,7 +5,6 @@ import { Route } from "routes/route";
 import vision from "vision";
 import inert from "inert";
 
-
 export class Server {
     private hapiServer: HapiServer;
     private database: Database;

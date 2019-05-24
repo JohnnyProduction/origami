@@ -1,6 +1,6 @@
 import * as request from "supertest";
 import { createTestServer, TestCRUDRoute } from "../utils/testing";
-import { AutorsRoute } from "./autors";
+import { AutorRoute } from "./autor";
 import { Database } from "../database";
 import { AutorModel } from "../model/autor";
 import { Server } from "../server";
@@ -9,7 +9,7 @@ describe("routes", () => {
     TestCRUDRoute(
         "Autor",
         AutorModel,
-        AutorsRoute,
+        AutorRoute,
         () => ({
             id: 5545,
             name: "autor name",
@@ -35,7 +35,7 @@ describe("routes", () => {
             
             await request
                 .agent(server.info.uri)
-                .get(`${new AutorsRoute().PATH}/${autorId}`)
+                .get(`${new AutorRoute().PATH}/${autorId}`)
                 .expect("Content-Type", /json/)
                 .expect(404, JSON.stringify({
                     error: {
@@ -56,7 +56,7 @@ describe("routes", () => {
     
             await request
                 .agent(server.info.uri)
-                .put(`${new AutorsRoute().PATH}/${newAutorData.id}?name=${newAutorData.name}`)
+                .put(`${new AutorRoute().PATH}/${newAutorData.id}?name=${newAutorData.name}`)
                 .expect("Content-Type", /json/)
                 .expect(404, JSON.stringify({
                     error: {
