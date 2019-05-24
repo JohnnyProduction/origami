@@ -1,13 +1,46 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@font-face {
+  font-family: 'Jura-Bold';
+  src: url("../fonts/Jura/Jura-Bold.ttf");
+}
+@font-face {
+  font-family: 'Jura-Regular';
+  src: url("../fonts/Jura/Jura-Regular.ttf");
+}
+@font-face {
+  font-family: 'Jura-SemiBold';
+  src: url("../fonts/Jura/Jura-SemiBold.ttf");
+}
+@font-face {
+  font-family: 'Play-Regular';
+  src: url("../fonts/Play/Play-Regular.ttf");
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0 20%;
+  background-image: url("../img/origami/side-triangle-bg.svg"),
+  url("../img/origami/left-side-triangle-bg.svg");
+  background-repeat: no-repeat, no-repeat;
+  background-position: left, right;
+  box-shadow: 0 0 3px 0 #607d8b;
+}
+
+@media screen and (min-width: 480px) and (max-width: 900px) {
+  body {
+      max-width: 480px;
+  }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1200px) {
+  body {
+      max-width: 900px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  body {
+      max-width: 1200px;
+  }
 }
