@@ -1,0 +1,15 @@
+.origamy-page__section {
+    display: inline-block;
+    padding: 5px 0;
+}
+
+.origamy-page__photo {
+    width: 350px;
+    float: left;
+    margin-right: 30px;
+}
+.origamy-page__point-photo {
+    width: 300px;
+    float: right;
+    margin-left: 30px;
+}

@@ -1,46 +1,28 @@
 @font-face {
   font-family: 'Jura-Bold';
-  src: url("../fonts/Jura/Jura-Bold.ttf");
+  src: url("fonts/Jura/Jura-Bold.ttf");
 }
 @font-face {
   font-family: 'Jura-Regular';
-  src: url("../fonts/Jura/Jura-Regular.ttf");
+  src: url("fonts/Jura/Jura-Regular.ttf");
 }
 @font-face {
   font-family: 'Jura-SemiBold';
-  src: url("../fonts/Jura/Jura-SemiBold.ttf");
+  src: url("fonts/Jura/Jura-SemiBold.ttf");
 }
 @font-face {
   font-family: 'Play-Regular';
-  src: url("../fonts/Play/Play-Regular.ttf");
+  src: url("fonts/Play/Play-Regular.ttf");
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  margin: 0 20%;
-  background-image: url("../img/origami/side-triangle-bg.svg"),
-  url("../img/origami/left-side-triangle-bg.svg");
-  background-repeat: no-repeat, no-repeat;
-  background-position: left, right;
-  box-shadow: 0 0 3px 0 #607d8b;
+* {
+  box-sizing: border-box;
 }
 
-@media screen and (min-width: 480px) and (max-width: 900px) {
-  body {
-      max-width: 480px;
-  }
+html, body, #root {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
 }
 
-@media screen and (min-width: 900px) and (max-width: 1200px) {
-  body {
-      max-width: 900px;
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  body {
-      max-width: 1200px;
-  }
-}

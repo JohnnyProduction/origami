@@ -1,0 +1,16 @@
+.typography__page-header {
+    font-family: Jura-Bold;
+    color: #37474F;
+}
+
+.typography__page-title {
+    font-family: Jura-Bold;
+    color: #37474F;
+}
+
+.typography__text {
+    font-family: Play-Regular;
+    font-size: 14pt;
+    line-height: 21pt;
+    color: #37474F;
+}
