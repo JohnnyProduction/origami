@@ -1,2 +1,4 @@
-nude_modules
-other files
+node_modules
+build
+.vscode
+.idea
