@@ -1,0 +1,7 @@
+export enum RouteType {
+    HOME = "HOME",
+    ORIGAMY = "ORIGAMY",
+    SEARCH_ORIGAMY = "SEARCH_ORIGAMY",
+    CATEGORIES = "CATEGORIES",
+    UNDEFINED = "UNDEFINED",
+}
