@@ -11,20 +11,20 @@
 }
 
 .page__bg-left {
-    width: 150px;
+    width: 100px;
     background-image: url("./side-triangle-bg.png");
     background-position: 0, 0;
     background-repeat: repeat-y;
-    background-size: 150px auto;
+    background-size: 100px auto;
     z-index: 0;
 }
 
 .page__bg-right {
-    width: 150px;
+    width: 100px;
     background-image: url("./side-triangle-bg.png");
     background-position: 0, 0;
     background-repeat: repeat-y;
-    background-size: 150px auto;
+    background-size: 100px auto;
     transform: rotate(180deg);
     z-index: 0;
 }
@@ -42,6 +42,9 @@
     .page__content {
         max-width: 480px;
     }
+    .page__bg-left, .page__bg-right {
+        display: none;
+    } 
 }
 
 @media screen and (min-width: 900px) and (max-width: 1200px) {
