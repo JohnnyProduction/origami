@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./index.module.css";
 import logoUrl from "./logo-fox.png"
+import { Menu } from "./menu";
 
 export class Page extends React.PureComponent {
     public render() {
@@ -11,6 +12,11 @@ export class Page extends React.PureComponent {
                     <header className={styles["page__header"]}>
                         <img className={styles["page__logo"]} src={logoUrl}></img>
                     </header>
+                    <div>
+                        <nav>
+                            <Menu></Menu>
+                        </nav>
+                    </div>
                     <main className={styles["page__content-main"]}>
                         {this.props.children}
                     </main>
