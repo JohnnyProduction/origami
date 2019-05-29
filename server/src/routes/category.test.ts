@@ -15,8 +15,6 @@ describe("routes", () => {
             image: "some url",
             rating: 4
         }),
-        "Category",
-        ["name", "image", "rating"],
     );
     describe("category", () => {
         let server: Server;
@@ -40,27 +38,6 @@ describe("routes", () => {
                 .expect(404, JSON.stringify({
                     error: {
                         description: `Category with id ${id} not found`,
-                        code: 404,
-                    }
-                }));
-        });
-        it("Должен вернуть 404 при обновлении не существующей категории", async () => {
-            server = await createTestServer();
- 
-            await server.start();
-
-            const newData = {
-                id: 111,
-                name: "new category name",
-            };
-    
-            await request
-                .agent(server.info.uri)
-                .put(`${new CategoryRoute().PATH}/${newData.id}?name=${newData.name}`)
-                .expect("Content-Type", /json/)
-                .expect(404, JSON.stringify({
-                    error: {
-                        description: `Category with id ${newData.id} not found`,
                         code: 404,
                     }
                 }));

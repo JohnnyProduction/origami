@@ -42,8 +42,6 @@ export const TestCRUDRoute = <T extends {id: number}>(
     ModelConstructor: any,
     Route: any,
     createItem: () => T,
-    notFoundName:string,
-    paramNames: string[],
 ) => {
     describe(name, () => {
         let server: Server;
@@ -109,7 +107,7 @@ export const TestCRUDRoute = <T extends {id: number}>(
             if (autor) {
                 const expectedBody = {
                     meta: {
-                        description: `${notFoundName} with name ${autor.name} was created`,
+                        description: `${name} with name ${autor.name} was created`,
                         ref: `${new Route().PATH}?id=${autor.id}`,
                     }
                 };
@@ -117,6 +115,10 @@ export const TestCRUDRoute = <T extends {id: number}>(
                 expect(response.body).toEqual(expectedBody);
             }
         });
+
+        // Берем все имена полей сущности кроме id
+        const paramNames = Object.keys(createItem()).filter(key => key !== "id");
+
         for(let i = 0; i < paramNames.length; i++) {
             it(`Обновляет ${paramNames[i]} item`, async () => {
                 server = await createTestServer();
@@ -131,7 +133,7 @@ export const TestCRUDRoute = <T extends {id: number}>(
     
                 const newParamValue = typeof (itemData as any)[paramNames[i]] === "string" 
                     ? "new param value"
-                    : 11;
+                    : 1211211221;
 
                 const newItemData = {
                     ...autor.toPlain(),
@@ -184,7 +186,45 @@ export const TestCRUDRoute = <T extends {id: number}>(
                 .expect("Content-Type", /json/)
                 .expect(404, JSON.stringify({
                     error: {
-                        description: `${notFoundName} with id ${autorId} not found`,
+                        description: `${name} with id ${autorId} not found`,
+                        code: 404,
+                    }
+                }));
+        });
+        it("Возвращает 404 с ошибкой если автора нет", async () => {  
+            const autorId = 6666;
+            server = await createTestServer();
+            
+            await server.start();
+            
+            await request
+                .agent(server.info.uri)
+                .get(`${new Route().PATH}/${autorId}`)
+                .expect("Content-Type", /json/)
+                .expect(404, JSON.stringify({
+                    error: {
+                        description: `${name} with id ${autorId} not found`,
+                        code: 404,
+                    }
+                }));
+        });
+        it("Должен вернуть 404 при обновлении не существующего автора", async () => {
+            server = await createTestServer();
+ 
+            await server.start();
+
+            const newAutorData = {
+                id: 111,
+                name: "new autor name",
+            };
+    
+            await request
+                .agent(server.info.uri)
+                .put(`${new Route().PATH}/${newAutorData.id}?name=${newAutorData.name}`)
+                .expect("Content-Type", /json/)
+                .expect(404, JSON.stringify({
+                    error: {
+                        description: `${name} with id ${newAutorData.id} not found`,
                         code: 404,
                     }
                 }));
