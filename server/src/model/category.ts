@@ -27,14 +27,6 @@ export class CategoryModel extends Model {
                 type: new DataTypes.TINYINT(),
                 allowNull: false,
             },
-            // complexity: {
-            //     type: new DataTypes.TINYINT(),
-            //     allowNull: false,
-            // },
-            // duration: {
-            //     type: new DataTypes.TINYINT(),
-            //     allowNull: false,
-            // },
         }, {
             tableName: "categories",
             modelName: "category",
@@ -46,8 +38,6 @@ export class CategoryModel extends Model {
     public name!: string;
     public image!: string;
     public rating!: number;
-    // complexity!: number;
-    // duration!: Number;
 
     // timestamps!
     public readonly createdAt!: Date;
