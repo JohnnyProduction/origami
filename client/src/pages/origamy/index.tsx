@@ -2,6 +2,7 @@ import React from "react";
 import { Page } from "../../core/component/page";
 import { PageHeader, Text, PageTitle } from "../../core/component/typography";
 import styles from "./index.module.css";
+import { MAPI } from "../../mapi";
 
 const data = {
     name: "Базовая форма - Водяная бомба",
@@ -38,6 +39,9 @@ const data = {
 
 
 export class OrigamyPage extends React.Component {
+    public componentDidMount() {
+        MAPI.Origamy.getById("6CTSxv8PPU").then(value => console.log(value));
+    }
     public render() {
         return (
             <Page>
