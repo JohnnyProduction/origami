@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/style.css">
     <script src="js/script.js"></script>
+    <script src="js/testfile.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -18,8 +19,8 @@
 
         <main class="content">
             <form class="search-form">
-                <input class="search-form__input" type="search" placeholder="Быстрый поиск">
-                <button class="search-form__button" type="submit" ></button>
+                <input id="input_form" class="search-form__input" type="search" placeholder="Быстрый поиск">
+                <button class="search-form__button" type="submit" onclick="getValue()"></button>
             </form>
             <div class="description">
                 <span class="description__text">Добро пожаловать на</span>
@@ -34,7 +35,7 @@
                 <div class="categories__title">
                     <span>Популярные категории</span>
                 </div>
-                <ul class="categories__grid">
+                <ul id="grid" class="categories__grid">
                     <li class="categories__cell">
                         <a class="categories__link" href="">
                             <img class="categories__img" src="./img/logo-fox.svg" alt="animal">
@@ -96,3 +97,4 @@
         </footer>
 </body>
 </html>
+    
