@@ -40,7 +40,8 @@ const data = {
 
 export class OrigamyPage extends React.Component {
     public componentDidMount() {
-        MAPI.Origamy.getById("6CTSxv8PPU").then(value => console.log(value));
+        // MAPI.Origamy.getById("6CTSxv8PPU").then(value => console.log(value));
+        MAPI.Origamy.getByFilter({from: 0, to: 10}).then(value => console.log(value));
     }
     public render() {
         return (
