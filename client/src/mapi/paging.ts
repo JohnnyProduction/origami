@@ -1,4 +1,4 @@
-export interface IFilter {
+export interface IPagingFilter {
     from: number;
     to: number;
     sort?: {

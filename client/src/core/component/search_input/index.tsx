@@ -1,6 +1,6 @@
 import React, { SyntheticEvent } from "react";
 import classNames from "classnames";
-import styles from "./input.module.css";
+import styles from "./index.module.css";
 import { IInputProps, Input } from "../input";
 
 export interface ISearchInputProps extends IInputProps {

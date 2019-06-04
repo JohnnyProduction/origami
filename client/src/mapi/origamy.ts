@@ -1,6 +1,6 @@
 import Parse from "parse";
 import { IMapiImage } from "./image";
-import { IFilter, IPage } from "./paging";
+import { IPagingFilter, IPage } from "./paging";
 
 export interface IMapiOrigamy extends Parse.Object {
     name: string;
@@ -21,7 +21,7 @@ export class OrigamyMapi {
         return query.first();
     }
 
-    public getByFilter(filter: IFilter): Promise<IPage<IMapiOrigamy>> {
+    public getByFilter(filter: IPagingFilter): Promise<IPage<IMapiOrigamy>> {
         const query = new Parse.Query<IMapiOrigamy>(this.ParseOrigamy);
 
         query.skip(filter.from);
