@@ -62,8 +62,12 @@ export class TiledList<T> extends React.Component<ITiledListProps<T>, ITiledList
     private renderTiles() {
         const numberTilesInRow = this.getNumberTilesInRow();
         const tileWidth = 100 / numberTilesInRow;
+        const gap = this.props.gap || 0;
         const tileStyle = {
-            width: `${tileWidth}%`
+            width: `${tileWidth}%`,
+            padding: gap,
+            paddingRight: 0,
+            paddingBottom: 0,
         }
 
         const lastLineClearFix = Array.from(new Array(numberTilesInRow - (this.props.tilesData.length % numberTilesInRow)))
@@ -73,7 +77,10 @@ export class TiledList<T> extends React.Component<ITiledListProps<T>, ITiledList
 
         return this.props.tilesData
             .map((tileData, i) => (
-                <li className={styles["tile"]} key={i} style={tileStyle}>
+                <li className={styles["tile"]} key={i} style={{
+                    ...tileStyle,
+                    paddingLeft: i % numberTilesInRow ? gap : 0,
+                }}>
                     {this.props.renderTile(tileData)}
                 </li>
             )).concat(lastLineClearFix);

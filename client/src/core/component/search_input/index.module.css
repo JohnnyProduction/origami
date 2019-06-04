@@ -1,3 +1,41 @@
-.search__input {
+.root {
+    position: relative;
+}
 
+.input {
+    width: 100%;
+    padding: 0 15px 0 15px;
+}
+
+.button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    border: none;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+}
+
+.button:hover {
+    opacity: 1;
+}
+
+.button:active {
+    opacity: 0.75;
+}
+
+.button_icon {
+    display: inline-block;
+    width: 75%;
+    height: 75%;
 }

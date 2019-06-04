@@ -1,0 +1,11 @@
+.root {
+    display: flex;
+    flex-direction: row;
+}
+
+.icon {
+    flex: 1;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}

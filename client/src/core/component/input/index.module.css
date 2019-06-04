@@ -1,5 +1,14 @@
 .input {
     height: 40px;
-    border: solid 1px 
+    border: none;
+    box-shadow: 1px 1px 3px 1px #607d8b;
+    opacity: 0.5;
+    outline: none;
+    font-family: Play;
+    font-size: 16pt;
+    color: #263238;
 }
 
+.input:focus {
+    opacity: 1;
+}

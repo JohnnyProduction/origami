@@ -7,6 +7,7 @@ import { RouteType } from "../../core/route_type";
 import Link from "redux-first-router-link";
 import { SearchInput } from "../../core/component/search_input";
 import { TiledList } from "../../core/component/tiled_list";
+import { SearchOrigamyTile } from "./tile";
 
 
 export class SearchOrigamyPage extends React.Component {
@@ -14,13 +15,13 @@ export class SearchOrigamyPage extends React.Component {
         return (
             <Page>
                 <PageHeader>Схемы оригами</PageHeader>
-                <SearchInput />
+                <SearchInput className={styles["search"]}/>
                 <TiledList
                     tilesData={[1, 2, 3, 4, 5, 6, 7]}
-                    numberTilesInRow={3}
-                    renderTile={(tileData) => <div style={{width: "100%", height: "100%", border: "solid 1px red"}}>{tileData}</div>}
+                    numberTilesInRow={2}
+                    renderTile={(tileData) => <SearchOrigamyTile />}
+                    gap={20}
                 />
-                <Link to={routesMap[RouteType.ORIGAMY].path || ""}>to some origamy</Link>
             </Page>
         );
     }
