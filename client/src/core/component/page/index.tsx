@@ -20,7 +20,7 @@ export class Page extends React.PureComponent {
                     <main className={styles["page__content-main"]}>
                         {this.props.children}
                     </main>
-                    <footer className={styles["page__content-footer"]}>
+                    <footer className={styles["page__footer"]}>
 
                     </footer>
                 </div>

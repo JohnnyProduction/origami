@@ -77,5 +77,10 @@
 }
 
 .page__footer {
-
+    height: 80px;
+    margin-top: 50px; 
+    background: #ffffff;
+    position: relative;
+    left: -50px;
+    width: calc(100% + 100px);
 }
