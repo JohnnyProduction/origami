@@ -6,14 +6,21 @@ import { IconedValue } from "../../core/component/iconed_value";
 import { routesMap } from "../../core/routes_map";
 import Link from "redux-first-router-link";
 import { RouteType } from "../../core/route_type";
+import { IMapiOrigamy } from "../../mapi/origamy";
 
-export class SearchOrigamyTile extends React.Component {
+interface ISearchOrigamyTileProps {
+    data: IMapiOrigamy;
+}
+
+export class SearchOrigamyTile extends React.Component<ISearchOrigamyTileProps> {
     public render() {
+        const link = `${routesMap[RouteType.ORIGAMY].path}/${this.props.data.id}`;
+        const imgUrl = `img/${this.props.data.id}/6.png`;
         return (
-            <Link to={routesMap[RouteType.ORIGAMY].path || ""} className={styles["root"]}>
-                <img className={styles["img"]} src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Origami-crane.jpg/1200px-Origami-crane.jpg"></img>
+            <Link to={link} className={styles["root"]}>
+                <img className={styles["img"]} src={imgUrl}></img>
                 <div  className={styles["right"]}>
-                    <h4 className={styles["title"]}>Олень</h4>
+                    <h4 className={styles["title"]}>{this.props.data.name}</h4>
                     <dl className={styles["description"]}>
                         <dt className={styles["description__title"]}>Автор</dt>
                         <dd className={styles["description__value"]}>Jo Nakashima</dd>
@@ -22,7 +29,7 @@ export class SearchOrigamyTile extends React.Component {
                             <IconedValue
                                 iconCount={5}
                                 maxValue={10}
-                                value={3}
+                                value={this.props.data.rating}
                                 renderIcon={(iconFill) => <img className={styles["description__value"]} src={starIconUrl}></img>}
                             />
                         </dd>
@@ -31,12 +38,12 @@ export class SearchOrigamyTile extends React.Component {
                             <IconedValue
                                 iconCount={5}
                                 maxValue={10}
-                                value={3}
+                                value={this.props.data.complexity}
                                 renderIcon={(iconFill) => <img className={styles["description__value"]} src={starComplexityUrl}></img>}
                             />
                         </dd>
                         <dt className={styles["description__title"]}>Длительность</dt>
-                        <dd className={styles["description__value"]}>8/10</dd>
+                        <dd className={styles["description__value"]}>{this.props.data.duration}</dd>
                     </dl>
                 </div>
             </Link>

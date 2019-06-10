@@ -10,12 +10,16 @@ const menuItems = [
         name: "Главная",
     },
     {
+        type: RouteType.SEARCH_ORIGAMY,
+        name: "Поиск",
+    },
+    {
         type: RouteType.CATEGORIES,
         name: "Категории",
     },
     {
-        type: RouteType.SEARCH_ORIGAMY,
-        name: "Оригами",
+        type: RouteType.BEGINNER,
+        name: "Новичку",
     },
 ]
 
@@ -27,7 +31,7 @@ export class Menu extends React.PureComponent {
                     menuItems.map(link => {
                         const url = routesMap[link.type].path || "";
                         return (
-                            <li className={styles["menu__item"]}>
+                            <li className={styles["menu__item"]} key={link.type}>
                                 <Link to={url} className={styles["menu__link"]}>
                                     {link.name}
                                     <div className={styles["menu__underline"]}></div>

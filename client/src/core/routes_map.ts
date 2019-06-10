@@ -35,4 +35,9 @@ export const routesMap: IRoutesMap = {
         path: "/categories",
         component: CategoriesPage,
     },
+    [RouteType.BEGINNER]: {
+        type: RouteType.BEGINNER,
+        path: "/beginner",
+        component: () => null as any as JSX.Element,
+    },
 }

@@ -1,97 +1,61 @@
-import Parse from "parse";
-import { IMapiImage, IParseImage } from "./image";
 import { IPagingFilter, IPage } from "./paging";
+import { ORIGAMY_MOCK } from "./mock";
 
-export interface IMapiFullOrigamy {
-    name: string;
-    duration: number;
-    complexity: number;
-    rating: number;
-    preview: string;
-    photos: IMapiImage[];
-    // popints: any
+export interface IMapiOrigamyStep {
+    step: number;
+    photos: string[];
+    description: string;
 }
 
 export interface IMapiOrigamy {
+    id: string;
     name: string;
+    description: string;
     duration: number;
     complexity: number;
     rating: number;
-    preview: string;
-}
-
-export interface IParseOrigamy extends Parse.Object {
-    name: string;
-    duration: number;
-    complexity: number;
-    rating: number;
-    preview: string;
+    photos: string[];
+    steps: IMapiOrigamyStep[];
 }
 
 export class OrigamyMapi {
-    private ParseOrigamy = Parse.Object.extend("Origamy"); 
-
-    // public getById(id: string): Promise<IMapiFullOrigamy | undefined> {
-    //     const query = new Parse.Query<IParseOrigamy>(this.ParseOrigamy);
-
-    //     query.equalTo("objectId", id);
-
-    //     return query.first().then(origamy => {
-    //         if (!origamy) {
-    //             return origamy;
-    //         }
-
-    //         return origamy.photos.query().find().then((images) => ({
-    //             name: origamy.name,
-    //             duration: origamy.duration,
-    //             complexity: origamy.complexity,
-    //             rating: origamy.rating,
-    //             preview: origamy.preview,
-    //             photos: images.map(img => ({url: img.url})),
-    //         }));
-    //     });
-    // }
-
     public getByFilter(filter: IPagingFilter): Promise<IPage<IMapiOrigamy>> {
-        const query = new Parse.Query<IParseOrigamy>(this.ParseOrigamy);
-
-        query.skip(filter.from);
-        query.limit(filter.to - filter.from);
-        
-        if (filter.match) {
-            Object.keys(filter.match).forEach(fieldName => {
-                const fieldValue = (filter.match as any)[fieldName];
-
-                if(typeof fieldValue === "string") {
-                    query.fullText(fieldName, fieldValue);
-                } else {
-                    query.equalTo(fieldName, fieldValue);
+        return new Promise((resolve) => {
+            const filtered = ORIGAMY_MOCK.filter(o => {
+                if (filter.match) {
+                    const keys = Object.keys(filter.match);
+                    for(let i = 0; i < keys.length; i++) {
+                        if(typeof filter.match[keys[i]] === "string") {
+                            if (o[keys[i]].toLocaleLowerCase().indexOf(filter.match[keys[i]].toLocaleLowerCase()) < 0) {
+                                return false;
+                            }
+                        } else {
+                            if (o[keys[i]] === filter.match[keys[i]]) {
+                                return false;
+                            }
+                        }
+                    }
                 }
+                return true;
             });
-        }
 
-        if (filter.sort) {
-            if (filter.sort.desc) {
-                query.descending(filter.sort.fieldName);
-            } else {
-                query.ascending(filter.sort.fieldName);
+            if (filter.sort) {
+                    const sort = filter.sort;
+                    filtered.sort((a, b) => {
+                        if (sort.desc) {
+                            return a[sort.fieldName] < b[sort.fieldName] ? 1 : -1;
+                        } else {
+                            return a[sort.fieldName] > b[sort.fieldName] ? 1 : -1;
+                        }
+                    });
             }
-        }
 
-        return Promise.all([
-            query.find().then(origamies => (origamies.map((origamy) => ({
-                name: origamy.name,
-                duration: origamy.duration,
-                complexity: origamy.complexity,
-                rating: origamy.rating,
-                preview: origamy.preview,
-            })))),
-            query.count(),
-        ]).then(([data, total]) => ({
-            from: filter.from,
-            to: filter.to,
-            total,
-            data,
-        }));
+            setTimeout(() => resolve({
+                total: filtered.length,
+                from: filter.from,
+                to: filter.to,
+                data: filtered.splice(filter.from, filter.to),
+            }), 600);
+        });
     }
 }

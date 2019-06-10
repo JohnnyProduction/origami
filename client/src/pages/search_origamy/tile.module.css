@@ -5,34 +5,36 @@
     height: 150px;
     background-color: #F5F5F5;
     box-shadow: 1px 1px 3px 1px #607d8b;
-    opacity: 0.75;
+    opacity: 0.85;
     cursor: pointer;
     text-decoration: none;
     color: inherit;
 }
 .root:hover {
     opacity: 1;
+    box-shadow: 1px 1px 5px 1px #607d8b;
     /* background-color: #ffffff; */
 }
 
 .img {
     height: 130px;
-    width: 130px;
+    width: 150px;
     padding: 0 10px;
 }
 
 .right {
     flex: 1;
+    align-self: start;
 }
 
 .title {
     font-family: Jura-Bold;
     color: #263238;
-    font-size: 18pt;
-    line-height: 18pt;
-    margin: 0px 0 10px 0;
-    width: 80%;
-    text-align: center;
+    font-size: 12pt;
+    line-height: 12pt;
+    margin: 10px 0 12px 5px;
+    width: 90%;
+    text-align: start;
 }
 
 .description {
@@ -42,7 +44,7 @@
 .description__title {
     display: inline-block;
     width: 30%;
-    padding: 3px 0;
+    padding: 2px 0;
     font-family: Play;
     font-size: 10pt;
     opacity: 0.5;
@@ -55,7 +57,7 @@
 .description__value {
     display: inline-block;
     flex: left;
-    width: 55%;
+    width: 50%;
 }
 
 .icon {

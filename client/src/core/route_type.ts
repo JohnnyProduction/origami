@@ -4,4 +4,5 @@ export enum RouteType {
     SEARCH_ORIGAMY = "SEARCH_ORIGAMY",
     CATEGORIES = "CATEGORIES",
     UNDEFINED = "UNDEFINED",
+    BEGINNER = "BEGINNER",
 }
