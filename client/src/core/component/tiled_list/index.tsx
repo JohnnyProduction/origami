@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import styles from "./index.module.css";
+import { Loader } from "../loader";
 
 
 export interface ITiledListProps<T> {
@@ -20,6 +21,7 @@ export interface ITiledListProps<T> {
     renderTile: (tileData: T) => JSX.Element;
     // Обработчик на нажатие на стрелочку еще (more) в конце списка
     onEndReached?: () => void;
+    hideMore?: boolean;
 }
 
 interface ITiledListState {
@@ -55,6 +57,8 @@ export class TiledList<T> extends React.Component<ITiledListProps<T>, ITiledList
         return (
             <ul className={classNames(styles["root"], this.props.className)} ref={this.ref}>
                 {this.state.currentWidth && this.renderTiles()}
+                {this.renderLoading()}
+                {this.renderMoreButton()}
             </ul>
         );
     }
@@ -84,6 +88,19 @@ export class TiledList<T> extends React.Component<ITiledListProps<T>, ITiledList
                     {this.props.renderTile(tileData)}
                 </li>
             )).concat(lastLineClearFix);
+    }
+
+    private renderLoading() {
+        return this.props.isLoading && <Loader />;
+    }
+
+    private renderMoreButton() {
+        return !this.props.isLoading &&
+            this.props.tilesData.length > 0 &&
+            !this.props.hideMore &&
+            (
+                <button className={styles["more"]} onClick={this.props.onEndReached}>Больше</button>
+            );
     }
 
     private getNumberTilesInRow(): number {

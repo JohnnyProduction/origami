@@ -4,7 +4,7 @@ import { ImageModel } from "./image";
 
 export class OrigamyPointModel extends Model {
     public static initialize(database: Database) {
-        super.init({
+        OrigamyPointModel.init({
             id: {
                 type: new DataTypes.INTEGER(),
                 autoIncrement: true,

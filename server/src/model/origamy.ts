@@ -8,13 +8,13 @@ import { AutorModel } from "./autor";
 export class OrigamyModel extends Model {
     public static initialize(database: Database) {
         OrigamyModel.init({
-            id: {
-                type: new DataTypes.INTEGER(),
-                autoIncrement: true,
+            code: {
+                type: new DataTypes.STRING(256),
+                allowNull: false,
                 primaryKey: true,
             },
             name: {
-                type: new DataTypes.STRING(128),
+                type: new DataTypes.STRING(256),
                 allowNull: false,
             },
             description: {

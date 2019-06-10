@@ -8,14 +8,13 @@ export interface IMapiOrigamyStep {
 }
 
 export interface IMapiOrigamy {
-    id: string;
+    code: string;
+    autor?: string;
     name: string;
-    description: string;
     duration: number;
     complexity: number;
     rating: number;
-    photos: string[];
-    steps: IMapiOrigamyStep[];
+    preview: string;
 }
 
 export class OrigamyMapi {

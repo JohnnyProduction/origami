@@ -9,17 +9,37 @@ import { IMapiOrigamy } from "../../mapi/origamy";
 import _ from "lodash";
 import { MAPI } from "../../mapi";
 
+const PAGE_SIZE = 4;
+
 interface ISearchOrigamyPage {
     search: string;
     data: IMapiOrigamy[];
+    currentPage: number;
     isLoading: boolean;
+    total: number;
 }
 
 export class SearchOrigamyPage extends React.Component<{}, ISearchOrigamyPage> {
     public state = {
         search: "",
+        currentPage: 0,
         data: [],
         isLoading: true,
+        total: 0,
+    }
+
+    public componentDidMount() {
+        MAPI.Origamy.getByFilter({
+            from: 0,
+            to: PAGE_SIZE,
+        }).then(origamy => {
+            this.setState({
+                currentPage: 0,
+                data: origamy.data,
+                isLoading: false,
+                total: origamy.total,
+            });
+        });
     }
 
     private handleSearch = _.throttle(() => {
@@ -28,14 +48,16 @@ export class SearchOrigamyPage extends React.Component<{}, ISearchOrigamyPage> {
         })
         MAPI.Origamy.getByFilter({
             from: 0,
-            to: 10,
+            to: PAGE_SIZE,
             match: {
                 name: this.state.search,
             }
         }).then(origamy => {
             this.setState({
+                currentPage: 0,
                 data: origamy.data,
                 isLoading: false,
+                total: origamy.total,
             });
         });
     }, 300);
@@ -43,6 +65,26 @@ export class SearchOrigamyPage extends React.Component<{}, ISearchOrigamyPage> {
     private handleSearchChanged = (e: SyntheticEvent<HTMLInputElement>) => {
         this.setState({
             search: e.currentTarget.value,
+        });
+    }
+
+    private handleEndReached = () => {
+        this.setState({
+            isLoading: true,
+        })
+        MAPI.Origamy.getByFilter({
+            from: this.state.currentPage,
+            to: this.state.currentPage + PAGE_SIZE,
+            match: {
+                name: this.state.search,
+            }
+        }).then(origamy => {
+            this.setState({
+                currentPage: this.state.currentPage + PAGE_SIZE,
+                data: [...this.state.data, ...origamy.data],
+                isLoading: false,
+                total: origamy.total,
+            });
         });
     }
 
@@ -57,10 +99,13 @@ export class SearchOrigamyPage extends React.Component<{}, ISearchOrigamyPage> {
                     onChange={this.handleSearchChanged}
                 />
                 <TiledList
+                    isLoading={this.state.isLoading}
                     tilesData={this.state.data}
                     numberTilesInRow={2}
                     renderTile={(tileData) => <SearchOrigamyTile data={tileData} />}
                     gap={20}
+                    onEndReached={this.handleEndReached}
+                    hideMore={this.state.total <= this.state.data.length}
                 />
             </Page>
         );

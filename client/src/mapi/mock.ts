@@ -1,11 +1,13 @@
 export const ORIGAMY_BASE = [
     {
+        "code": "base_form_water_bomb",
         "name": "Базовая форма - Водяная бомба",
+        "autor": null,
         "description": "У этой базовой формы имеются две видимые квадратные плоскости,не раскрывающийся («глухой») угол, образованный в центре начальной формы (квадрата), и раскрывающийся угол, расположенный напротив«глухого» и образованный за счет углов квадрата. Это одна из самых часто используемых базовых форм оригами. поэтому важно научиться правильно и довольно быстро складывать ее.",
         "complexity": 2,
         "duration": 5,
         "rating": 6,
-        "id": "base_form_water_bomb",
+        "preview": "6.png",
         "steps": [
             {
                 "step": 1,
@@ -35,12 +37,14 @@ export const ORIGAMY_BASE = [
         ]
     },
     {
+        "code": "base_form_water_bomb",
         "name": "Базовая форма - Воздушный змей",
+        "autor": null,
         "description": "Это простая форма внешне действительно напоминающая воздушного змея. Несмотря на свою простоту очень часто используется в других моделях",
         "complexity": 0,
         "duration": 1,
         "rating": 3,
-        "id": "base_form_water_bomb",
+        "preview": "6.png",
         "steps": [
             {
                 "step": 1,
@@ -55,13 +59,15 @@ export const ORIGAMY_BASE = [
         ]
     },
     {
+        "code": "base_form_water_bomb",
         "name": "Базовая форма - Рыба",
+        "autor": "Joi Nakasima",
         "description": "Эта фигура начинается с другой базовой формы - Воздушный змей. Имеет два клапана обращенных внутрь фигуры",
         "complexity": 3,
         "duration": 6,
         "rating": 6,
-        "id": "base_form_water_bomb",
         "base": "base_kite",
+        "preview": "6.png",
         "steps": [
             {
                 "step": 1,
