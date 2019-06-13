@@ -1,42 +1,25 @@
-import { Database } from "../database";
-import { Model, DataTypes } from "sequelize";
+import { TDBConnection } from "../database";
+import { sqlGet, sqlRun } from "./sql";
 
-export class AutorModel extends Model {
-    public static initialize(database: Database) {
-        super.init({
-            id: {
-                type: new DataTypes.INTEGER(),
-                autoIncrement: true,
-                primaryKey: true,
-            },
-            name: {
-                type: new DataTypes.STRING(128),
-                allowNull: false,
-            },
-            avatar: {
-                type: new DataTypes.STRING(128),
-                allowNull: true,
-            }
-        }, {
-            tableName: "autors",
-            modelName: "autor",
-            sequelize: database.sequelize,
-        });
-    }
+export type TAutor = {
+    code: string;
+    name: string;
+}
 
-    public id!: number;
-    public name!: string;
-    public avatar!: string | null;
+export const getAutorByCode = (db: TDBConnection, code: string) => {
+    return sqlGet<TAutor>(
+        db,
+        "SELECT * FROM autors WHERE code = ?",
+        [code]
+    );
+}
 
-    // timestamps!
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
+export const insertAutor = (db: TDBConnection, autor: TAutor): Promise<void> => {
+    const {code, name} = autor;
 
-    public toPlain() {
-        return {
-            id: this.id,
-            name: this.name,
-            avatar: this.avatar,
-        }
-    }
+    return sqlRun(
+        db,
+        "INSERT INTO autors (code, name) VALUES (?, ?)",
+        [code, name]
+    );
 }

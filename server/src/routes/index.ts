@@ -1,10 +1,10 @@
-import { Database } from "database";
-import { AutorRoute } from "./autor";
-import { CategoryRoute } from "./category";
+import { TDBConnection } from "../database";
+import { TServerRoute } from "../server";
+import { getAutorReadRoute, getAutorCreateRoute } from "./autor";
 
-export const getAllRoutes = (database: Database) => {
+export const createAllRoutes = (db: TDBConnection): TServerRoute[] => {
     return [
-        new AutorRoute(database),
-        new CategoryRoute(database),
-    ];
-}
+        getAutorReadRoute(db),
+        getAutorCreateRoute(db),
+    ]
+};

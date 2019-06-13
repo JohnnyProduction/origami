@@ -1,115 +1,86 @@
-import { Database } from "../database";
-import { ServerRoute, Lifecycle, HandlerDecorations } from "hapi";
+import { TDBConnection } from "../database";
+import { TServerRoute } from "../server";
+import { ResponseToolkit, Request } from "hapi";
+import { parseStringQuery } from "../utils/parse_query";
 import { JoiObject } from "joi";
-import { CONFIG } from "../config";
-const joi = require("joi");
+const  joi = require("@hapi/joi");
 
-export abstract class Route {
-    protected database: Database;
-
-    constructor(database?: Database) {
-        this.database = database || new Database(CONFIG);
-    }
-
-    public abstract getHapiRoutes(): ServerRoute[];
+export type TReadRouteConfig<T> = {
+    name: string,
+    path: string,
+    description: string,
+    notes: string,
+    getItemByCode: (db: TDBConnection, code: string) => Promise<T|undefined>,
 }
 
-interface ICRUDServerRoute<T> {
-    description: string;
-    notes: string;
-    handler: Lifecycle.Method | HandlerDecorations
-    params?: {
-        [name in keyof T]: JoiObject
-    },
-}
-
-export abstract class CRUDRoute<T> extends Route {
-    public getHapiRoutes() {
-        const read = this.read();
-        const readAll = this.readAll();
-        const create = this.create();
-        const update = this.update();
-        const del = this.delete();
-
-        return [
-            {
-                method: "GET",
-                path: `${this.PATH}/{id}`,
-                options: {
-                    tags: ["api"],
-                    description: read.description,
-                    notes: read.notes,
-                    validate: {
-                        params: {
-                            id: joi.number(),
-                        }
-                    }
-                },
-                handler: read.handler
-            },
-            {
-                method: "GET",
-                path: this.PATH,
-                options: {
-                    tags: ["api"],
-                    description: readAll.description,
-                    notes: readAll.notes,
-                },
-                handler: readAll.handler
-            },
-            {
-
-                method: "POST",
-                path: this.PATH,
-                options: {
-                    tags: ["api"],
-                    description: create.description,
-                    notes: create.notes,
-                    validate: {
-                        query: create.params
-                    }
-                },
-                handler: create.handler,
-            },
-            {
-                method: "PUT",
-                path: `${this.PATH}/{id}`,
-                options: {
-                    tags: ["api"],
-                    description: update.description,
-                    notes: update.notes,
-                    validate: {
-                        params: {
-                            id: joi.number(),
-                        },
-                        query: update.params,
-                    },
-                },
-                handler: update.handler,
-            },
-            {
-                method: "DELETE",
-                path: `${this.PATH}/{id}`,
-                options: {
-                    tags: ["api"],
-                    description: del.description,
-                    notes: del.notes,
-                    validate: {
-                        params: {
-                            id: joi.number(),
-                        },
-                    },
-                    handler: del.handler,
-                },
+export const getReadRoute = <T>(db: TDBConnection, config: TReadRouteConfig<T>): TServerRoute => {
+    return {
+        method: "GET",
+        path: `${config.path}/{code}`,
+        options: {
+            tags: ["api"],
+            description: config.description,
+            notes: config.notes,
+            validate: {
+                params: {
+                    code: joi.string(),
+                }
             }
-        ]
-    }
+        },
+        handler: async (request: Request, h: ResponseToolkit, err?: Error) => {
+            const code = parseStringQuery(request.params.code);
 
-    public abstract PATH: string;
-    
-    protected abstract read(): ICRUDServerRoute<T>;
-    protected abstract readAll(): ICRUDServerRoute<T>;
-    protected abstract create(): ICRUDServerRoute<T>;
-    protected abstract update(): ICRUDServerRoute<T>;
-    protected abstract delete(): ICRUDServerRoute<T>;
+            const item = await config.getItemByCode(db, code);
+
+            if (!item) {
+                return h.response(JSON.stringify({
+                    error: {
+                        description: `${config.name} with code ${code} not found`,
+                        code: 404,
+                    }
+                })).type("application/json").code(404);
+            }
+
+            return h.response(JSON.stringify(item)).type("application/json");
+        },
+    }
 }
+
+export type TCreateRouteConfig<T> = {
+    name: string,
+    path: string,
+    description: string,
+    notes: string,
+    params: {[paramName: string]: JoiObject}
+    insertItem: (db: TDBConnection, item: T) => Promise<void>,
+}
+
+export const getCreateRoute = <T extends {code: string}>(db: TDBConnection, config: TCreateRouteConfig<T>): TServerRoute => {
+    return {
+        method: "POST",
+        path: config.path,
+        options: {
+            tags: ["api"],
+            description: config.description,
+            notes: config.notes,
+            validate: {
+                payload: config.params,
+            }
+        },
+        handler: async (request: Request, h: ResponseToolkit, err?: Error) => {
+            const item: T = Object.keys(config.params).reduce<T>((acc, key) => {
+                return { ...acc, [key]: (request as any).payload[key]};
+            }, {} as T);
+
+            await config.insertItem(db, item);
+
+            return h.response(JSON.stringify({
+                meta: {
+                    description: `${config.name} with code ${item.code} was created`,
+                    ref: `${config.path}?id=${item.code}`,
+                }
+            })).code(201).type("application/json");
+        },
+    }
+}
+

@@ -1,39 +1,21 @@
 import { Server as HapiServer, ServerRoute } from "hapi";
-import { IServerConfig } from "config";
-import { Database } from "database";
-import { Route } from "routes/route";
+import { TServerConfig } from "config";
 import vision from "vision";
 import inert from "inert";
 
-export class Server {
-    private hapiServer: HapiServer;
-    private database: Database;
+export type TServer = HapiServer;
+export type TServerRoute = ServerRoute;
 
-    constructor(
-        config: IServerConfig,
-        routes: Route[],
-        database: Database,
-    ) {
-        this.database = database;
+export const createServer = (config: TServerConfig): TServer => {
+    return new HapiServer({host: config.host, port: config.port});
+}
 
-        this.hapiServer = new HapiServer({
-            port: config.port,
-            host: config.host,
-        });
+export const addRoutesToServer = (server: TServer, routes: TServerRoute[]): void => {
+    server.route(routes);
+}
 
-        this.hapiServer.route(
-            routes
-            .map((route: Route) => route.getHapiRoutes())
-            .reduce((acc: ServerRoute[], cur: ServerRoute[]) => [...acc, ...cur], [])
-        );
-    }
-
-    public get info() {
-        return this.hapiServer.info;
-    }
-
-    public async start() {
-        this.hapiServer.register([
+export const startServer = async (server: TServer) => {
+        await server.register([
             { plugin: inert },
             { plugin: vision },
             {
@@ -62,12 +44,9 @@ export class Server {
                 }
             },
         ])
-        await this.database.open();
-        await this.hapiServer.start();
-    }
+    await server.start();
+}
 
-    public async stop() {
-        await this.hapiServer.stop();
-        await this.database.close();
-    }
+export const stopServer = async (server: TServer): Promise<void> => {
+    await server.stop();
 }

@@ -1,23 +1,15 @@
-import { Server } from "./server";
-import { Database } from "./database";
-import { getAllRoutes } from "./routes";
 import { CONFIG } from "./config";
-import { initAllModels } from "./model";
+import { startService, stopService } from "./service";
+
 
 (async () => {
-    process.on('unhandledRejection', (err: any) => {
+    process.on('unhandledRejection', async (err: any) => {
         console.log(err);
 
         process.exit(1);
     });
 
-    const database = new Database(CONFIG);
+    const service = await startService(CONFIG);
 
-    initAllModels(database);
-
-    const server = new Server(CONFIG, getAllRoutes(database), database);
-
-    await server.start();
-
-    console.log(`server started on ${server.info.uri}`)
+    console.log(`server started on ${service.server.info.uri}`)
 })();

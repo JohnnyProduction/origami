@@ -1,130 +1,85 @@
-import { Database } from "../database";
-import { Model, DataTypes, Association, HasManyGetAssociationsMixin, HasManyAddAssociationMixin, HasManyHasAssociationMixin, HasManyCountAssociationsMixin, HasManyCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, HasOneCreateAssociationMixin } from "sequelize";
-import { ImageModel } from "./image";
-import { OrigamyPointModel } from "./origamy_point";
-import { CategoryModel } from "./category";
-import { AutorModel } from "./autor";
+import { TCategory } from "./category";
+import { TDBConnection } from "database";
+import { sqlGet, sqlAll, sqlExec, sqlRun } from "./sql";
+import { TPage, TPageSort } from "./page";
 
-export class OrigamyModel extends Model {
-    public static initialize(database: Database) {
-        OrigamyModel.init({
-            code: {
-                type: new DataTypes.STRING(256),
-                allowNull: false,
-                primaryKey: true,
-            },
-            name: {
-                type: new DataTypes.STRING(256),
-                allowNull: false,
-            },
-            description: {
-                type: new DataTypes.STRING(),
-                allowNull: false,
-            },
-            rating: {
-                type: new DataTypes.TINYINT(),
-                allowNull: false,
-            },
-            complexity: {
-                type: new DataTypes.TINYINT(),
-                allowNull: false,
-            },
-            duration: {
-                type: new DataTypes.TINYINT(),
-                allowNull: false,
-            },
-        }, {
-            tableName: "origamies",
-            modelName: "origamy",
-            sequelize: database.sequelize,
-        });
+export type TOrigamyStep = {
+    code: string,
+    number: number,
+    description: string,
+    photos: string[],
+    schemas: string[],
+}
 
-        OrigamyModel.hasMany(ImageModel, { 
-            as: "photos",
-        });
-        OrigamyModel.hasMany(OrigamyPointModel, { 
-            as: "points",
-        });
-        OrigamyModel.hasMany(CategoryModel, { 
-            as: "categories",
-        });
-        OrigamyModel.hasOne(AutorModel, {
-            as: "autor",
-        });
+export type TShortOrigamy = {
+    code: string,
+    name: string,
+    complexity: number,
+    duration: number,
+}
+
+export type TOrigamy = TShortOrigamy & {
+    description: string,
+    photos: string[],
+    categories: TCategory[],
+    steps: TOrigamyStep[],
+}
+
+export const getOrigamyByCode = (db: TDBConnection, code: string) => {
+    return sqlGet<TOrigamy>(
+        db,
+        "SELECT * FROM origamies WHERE code = ?",
+        [code]
+    );
+}
+
+export const insertOrigamy = (db: TDBConnection, origamy: TShortOrigamy) => {
+    const { code, name, complexity, duration } = origamy;
+
+    return sqlRun(
+        db,
+        "INSERT INTO origamies (code, name, complexity, duration) VALUES (?, ?, ?, ?)",
+        [code, name, complexity, duration]
+    )
+}
+
+export const getOrigamyPage = async (db: TDBConnection, from: number, to:number, sort: TPageSort, textMatch?: string): Promise<TPage<TShortOrigamy>> => {
+    let matchSql = "";
+    let sortSql = "";
+    let matchParams: any[] = [];
+    let sortParams: any[] = [];
+
+    if (textMatch) {
+        matchSql = "WHERE origamies_index MATCH '?'";
+        matchParams.push(textMatch);
     }
 
-    public id!: number;
-    public name!: string;
-    public description!: string;
-    public rating!: number;
-    public complexity!: number;
-    public duration!: Number;
+    if (sort) {
+        sortSql += "ORDER BY ?"
+        sortParams.push(sort.fieldName);
 
-    // timestamps!
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
-
-    // Since TS cannot determine model association at compile time
-    // we have to declare them here purely virtually
-    // these will not exist until `Model.init` was called.
-
-    public getPhotos!: HasManyGetAssociationsMixin<ImageModel>; // Note the null assertions!
-    public addPhoto!: HasManyAddAssociationMixin<ImageModel, string>;
-    public hasPhoto!: HasManyHasAssociationMixin<ImageModel, string>;
-    public countPhotos!: HasManyCountAssociationsMixin;
-    public createPhoto!: HasManyCreateAssociationMixin<ImageModel>;
-
-    public getPoints!: HasManyGetAssociationsMixin<OrigamyPointModel>; // Note the null assertions!
-    public addPoint!: HasManyAddAssociationMixin<OrigamyPointModel, number>;
-    public hasPoint!: HasManyHasAssociationMixin<OrigamyPointModel, number>;
-    public countPoints!: HasManyCountAssociationsMixin;
-    public createPoint!: HasManyCreateAssociationMixin<OrigamyPointModel>;
-
-    public getCategories!: HasManyGetAssociationsMixin<CategoryModel>; // Note the null assertions!
-    public addCategory!: HasManyAddAssociationMixin<CategoryModel, number>;
-    public hasCategory!: HasManyHasAssociationMixin<CategoryModel, number>;
-    public countCategories!: HasManyCountAssociationsMixin;
-    public createCategory!: HasManyCreateAssociationMixin<CategoryModel>;
-
-    public getAutor!: HasOneGetAssociationMixin<AutorModel>; // Note the null assertions!
-    public setAutor!: HasOneSetAssociationMixin<AutorModel, number>;
-    public createAutor!: HasOneCreateAssociationMixin<AutorModel>;
-
-    public static associations: {
-        photos: Association<OrigamyModel, ImageModel>;
-        points: Association<OrigamyModel, OrigamyPointModel>;
-        categories: Association<OrigamyModel, CategoryModel>;
-        autor: Association<OrigamyModel, AutorModel>;
-    };
-
-    public async toPlain() {
-        const autorModel = await this.getAutor();
-        const autor = autorModel.toPlain();
-
-        const categoriesModels = await this.getCategories();
-        const categories = categoriesModels.map(category => category.toPlain());
-
-        const photosModels = await this.getPhotos();
-        const photos = photosModels.map(photo => photo.toPlain());
-
-        const pointsModels = await this.getPoints();
-        const points = [];
-
-        for(let i = 0; i < pointsModels.length; i++) {
-            points.push(await pointsModels[i].toPlain());
+        if (sort.desc) {
+            sortSql += " DESC"
         }
+    }
 
-        return {
-            id: this.id,
-            name: this.name,
-            description: this.description,
-            rating: this.rating,
-            complexity: this.complexity,
-            duration: this.duration,
-            autor,
-            categories,
-            photos,
-            points,
-        };
+    const totalResult = await sqlGet<{"COUNT(*)": number}>(
+        db,
+        `SELECT COUNT(*) FROM origamies_index${matchSql}`,
+        matchParams,
+    );
+    const total = totalResult ? totalResult["COUNT(*)"] : 0;
+        console.log(`SELECT code, name, complexity, duration FROM origamies ${sortSql} LIMIT ? OFFSET ?`, [...matchParams, ...sortParams, to - from, from])
+    const data = await sqlAll<TShortOrigamy>(
+        db,
+        `SELECT code, name, complexity, duration FROM origamies ${sortSql} LIMIT ? OFFSET ?`,
+        [...matchParams, ...sortParams, to - from, from],
+    );
+
+    return {
+        from,
+        to,
+        total,
+        data,
     }
 }

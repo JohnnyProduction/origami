@@ -1,15 +1,19 @@
-export interface IDatabaseConfig {
+import { OPEN_CREATE, OPEN_READWRITE } from "sqlite3";
+
+export type TDatabaseConfig = {
     sqlitePath: string;
+    sqliteMode: number;
 }
 
-export interface IServerConfig {
+export type TServerConfig = {
     host: string;
     port: number;
 }
-export type IConfig = IDatabaseConfig & IServerConfig;
+export type TConfig = TDatabaseConfig & TServerConfig;
 
-export const CONFIG:IConfig = {
+export const CONFIG: TConfig = {
     host: "localhost",
     port: 8778,
     sqlitePath: "./dev_db.sqlite",
+    sqliteMode: OPEN_CREATE | OPEN_READWRITE,
 };
