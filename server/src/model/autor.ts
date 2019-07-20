@@ -1,5 +1,6 @@
 import { TDBConnection } from "../database";
-import { sqlGet, sqlRun } from "./sql";
+import { sqlGet, sqlRun, sqlAll } from "./sql";
+
 
 export type TAutor = {
     code: string;
@@ -14,12 +15,28 @@ export const getAutorByCode = (db: TDBConnection, code: string) => {
     );
 }
 
-export const insertAutor = (db: TDBConnection, autor: TAutor): Promise<void> => {
+export const getAllAutors = (db: TDBConnection) => {
+    return sqlAll<TAutor>(
+        db,
+        "SELECT * FROM autors",
+        [],
+    );
+}
+
+export const insertAutor = (db: TDBConnection, autor: TAutor) => {
     const {code, name} = autor;
 
     return sqlRun(
         db,
         "INSERT INTO autors (code, name) VALUES (?, ?)",
         [code, name]
+    );
+}
+
+export const deleteAutorByCode = (db: TDBConnection, code: string) => {
+    return sqlRun(
+        db,
+        "DELETE FROM autors WHERE code = ?",
+        [code]
     );
 }

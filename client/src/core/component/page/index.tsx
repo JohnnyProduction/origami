@@ -14,7 +14,7 @@ export class Page extends React.PureComponent {
                     </header>
                     <div>
                         <nav>
-                            <Menu></Menu>
+                            <Menu />
                         </nav>
                     </div>
                     <main className={styles["page__content-main"]}>

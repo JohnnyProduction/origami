@@ -8,7 +8,7 @@ export type TPageFilter = {
     from: number,
     to: number,
     match?: {
-        [key: string]: any,
+        [key: string]: string,
     },
     sort?: TPageSort,
 }

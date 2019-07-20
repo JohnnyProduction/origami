@@ -1,18 +1,21 @@
 export interface IPagingFilter {
-    from: number;
-    to: number;
+    start: number;
+    limit: number;
     sort?: {
         fieldName: string;
         desc?: boolean;
     }
     match?: {
-        [fieldName: string]: any;
+        [fieldName: string]: string[];
     }
 }
 
 export interface IPage<T> {
-    from: number;
-    to: number;
-    total: number;
+    start: number;
+    limit: number;
     data: T[];
+}
+
+export interface IImage {
+    url: string;
 }

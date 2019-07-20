@@ -16,7 +16,7 @@ export class SearchOrigamyTile extends React.Component<ISearchOrigamyTileProps> 
     public render() {
         const {data} = this.props;
         const link = `${routesMap[RouteType.ORIGAMY].path}/${data.code}`;
-        const imgUrl = `img/${data.code}/${data.preview}`;
+        const imgUrl = data.preview;
         const autor = data.autor || "=//=";
 
         return (

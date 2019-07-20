@@ -1,7 +1,7 @@
 import { TDBConnection, openDBConnection, closeDBConnection, applyDBSchema } from "./database";
 import { TConfig } from "./config";
 import { createServer, TServer, startServer, stopServer, addRoutesToServer } from "./server";
-import { createAllRoutes } from "./routes";
+import { getAllRoutes } from "./routes";
 
 export type TService = {
     server: TServer;
@@ -15,7 +15,7 @@ export const startService = async (config: TConfig): Promise<TService> => {
 
     const server = createServer(config);
 
-    addRoutesToServer(server, createAllRoutes(db));
+    addRoutesToServer(server, getAllRoutes(db));
 
     await startServer(server);
 

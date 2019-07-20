@@ -8,6 +8,9 @@ import { SearchOrigamyTile } from "./tile";
 import { IMapiOrigamy } from "../../mapi/origamy";
 import _ from "lodash";
 import { MAPI } from "../../mapi";
+import { Subject, Observable, Subscription } from "rxjs";
+import { flatMap } from "rxjs/operators";
+import { IPage } from "../../mapi/paging";
 
 const PAGE_SIZE = 4;
 
@@ -20,6 +23,10 @@ interface ISearchOrigamyPage {
 }
 
 export class SearchOrigamyPage extends React.Component<{}, ISearchOrigamyPage> {
+    private origamyPage$: Observable<IPage<IMapiOrigamy>>;
+    private fetchOrigamy$ = new Subject<number>();
+    private origamySubscription: Subscription | null = null;
+
     public state = {
         search: "",
         currentPage: 0,
@@ -28,38 +35,53 @@ export class SearchOrigamyPage extends React.Component<{}, ISearchOrigamyPage> {
         total: 0,
     }
 
+    constructor(props: {}) {
+        super(props);
+
+        this.origamyPage$ = this.fetchOrigamy$.pipe(
+            flatMap((pageNumber) => {
+                return MAPI.Origamy.getByFilter({
+                    start: pageNumber * PAGE_SIZE,
+                    limit: PAGE_SIZE,
+                });
+            }),
+        );
+    }
+
     public componentDidMount() {
-        MAPI.Origamy.getByFilter({
-            from: 0,
-            to: PAGE_SIZE,
-        }).then(origamy => {
-            this.setState({
-                currentPage: 0,
-                data: origamy.data,
-                isLoading: false,
-                total: origamy.total,
-            });
+        this.fetchOrigamyPage(0);
+    }
+
+    private fetchOrigamyPage(pageNumber: number) {
+        if (this.origamySubscription) {
+            this.origamySubscription.unsubscribe();
+        }
+
+        this.setState({
+            isLoading: true,
+            data: pageNumber === 0 ? [] : this.state.data,
         });
+
+        this.origamySubscription = this.origamyPage$.subscribe(page => {
+            this.setState({
+                data: [...this.state.data, ...page.data],
+                currentPage: Math.floor(page.start / PAGE_SIZE),
+                isLoading: false,
+            });
+            console.log(this.state.data)
+        });
+
+        this.fetchOrigamy$.next(pageNumber);
+    }
+
+    public componentWillUnmount() {
+        if (this.origamySubscription) {
+            this.origamySubscription.unsubscribe();
+        }
     }
 
     private handleSearch = _.throttle(() => {
-        this.setState({
-            isLoading: true,
-        })
-        MAPI.Origamy.getByFilter({
-            from: 0,
-            to: PAGE_SIZE,
-            match: {
-                name: this.state.search,
-            }
-        }).then(origamy => {
-            this.setState({
-                currentPage: 0,
-                data: origamy.data,
-                isLoading: false,
-                total: origamy.total,
-            });
-        });
+        this.fetchOrigamyPage(0);
     }, 300);
 
     private handleSearchChanged = (e: SyntheticEvent<HTMLInputElement>) => {
@@ -69,23 +91,7 @@ export class SearchOrigamyPage extends React.Component<{}, ISearchOrigamyPage> {
     }
 
     private handleEndReached = () => {
-        this.setState({
-            isLoading: true,
-        })
-        MAPI.Origamy.getByFilter({
-            from: this.state.currentPage,
-            to: this.state.currentPage + PAGE_SIZE,
-            match: {
-                name: this.state.search,
-            }
-        }).then(origamy => {
-            this.setState({
-                currentPage: this.state.currentPage + PAGE_SIZE,
-                data: [...this.state.data, ...origamy.data],
-                isLoading: false,
-                total: origamy.total,
-            });
-        });
+        this.fetchOrigamyPage(this.state.currentPage + 1);
     }
 
     public render() {

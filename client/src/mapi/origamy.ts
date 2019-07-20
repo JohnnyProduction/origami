@@ -1,5 +1,5 @@
 import { IPagingFilter, IPage } from "./paging";
-import { ORIGAMY_MOCK } from "./mock";
+import axios from "axios";
 
 export interface IMapiOrigamyStep {
     step: number;
@@ -9,7 +9,7 @@ export interface IMapiOrigamyStep {
 
 export interface IMapiOrigamy {
     code: string;
-    autor?: string;
+    base?: IMapiOrigamy;
     name: string;
     duration: number;
     complexity: number;
@@ -19,42 +19,35 @@ export interface IMapiOrigamy {
 
 export class OrigamyMapi {
     public getByFilter(filter: IPagingFilter): Promise<IPage<IMapiOrigamy>> {
-        return new Promise((resolve) => {
-            const filtered = ORIGAMY_MOCK.filter(o => {
-                if (filter.match) {
-                    const keys = Object.keys(filter.match);
-                    for(let i = 0; i < keys.length; i++) {
-                        if(typeof filter.match[keys[i]] === "string") {
-                            if (o[keys[i]].toLocaleLowerCase().indexOf(filter.match[keys[i]].toLocaleLowerCase()) < 0) {
-                                return false;
-                            }
-                        } else {
-                            if (o[keys[i]] === filter.match[keys[i]]) {
-                                return false;
-                            }
-                        }
-                    }
-                }
-                return true;
-            });
+        const params:any = {
+            _limit: filter.limit,
+            _start: filter.start
+        }
 
-            if (filter.sort) {
-                    const sort = filter.sort;
-                    filtered.sort((a, b) => {
-                        if (sort.desc) {
-                            return a[sort.fieldName] < b[sort.fieldName] ? 1 : -1;
-                        } else {
-                            return a[sort.fieldName] > b[sort.fieldName] ? 1 : -1;
-                        }
-                    });
+        if (filter.sort) {
+            if (filter.sort.desc) {
+                params["_sort"] = `${filter.sort.fieldName}:DESC`;
+            } else {
+                params["_sort"] = `${filter.sort.fieldName}:ASC`;
             }
+        }
 
-            setTimeout(() => resolve({
-                total: filtered.length,
-                from: filter.from,
-                to: filter.to,
-                data: filtered.splice(filter.from, filter.to),
-            }), 600);
-        });
+        if (filter.match) {
+            const match = filter.match;
+            Object.keys(filter.match).forEach(key => {
+                const values = match[key];
+
+                for (let i = 0; i < values.length; i++) {
+                    params[`${key}_contains`] = values[i];
+                }
+            });
+        }
+
+        return axios.get("http://localhost:1337/origamies", {params})
+            .then(result => ({
+                limit: filter.limit,
+                start: filter.start,
+                data: result.data,
+            }));
     }
 }

@@ -29,18 +29,46 @@ export const closeDBConnection = (db: TDBConnection): Promise<void> => {
 
 export const applyDBSchema = (db: TDBConnection): Promise<void> => {
     return new Promise((resolve, reject) => {
-        const sql = `
+        db.exec(SCHEMA, (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        })
+    });
+}
+
+const SCHEMA = 
+`
+CREATE TABLE IF NOT EXISTS categories (
+    code CHAR(64) PRIMARY KEY NOT NULL UNIQUE,
+    name CHAR(128) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS autors (
     code CHAR(64) PRIMARY KEY NOT NULL UNIQUE,
     name CHAR(128) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS origamy_steps (
+    code CHAR(64) PRIMARY KEY NOT NULL UNIQUE,
+    number INTEGER NOT NULL,
+    description STRING NOT NULL,
+    photos STRING,
+    schemas STRING NOT NULL,
+    origamy_code CHAR(64),
+    FOREIGN KEY(origamy_code) REFERENCES origamies(code)
 );
 
 CREATE TABLE IF NOT EXISTS origamies (
     code CHAR(64) PRIMARY KEY NOT NULL UNIQUE,
     name CHAR(128) NOT NULL,
     complexity INTEGER NOT NULL,
-    duration INTEGER NOT NULL
+    duration INTEGER NOT NULL,
 );
+
+
 
 CREATE VIRTUAL TABLE  IF NOT EXISTS origamies_index USING fts5(name);
 
@@ -63,14 +91,4 @@ CREATE TRIGGER IF NOT EXISTS after_origamies_delete AFTER DELETE ON origamies BE
     DELETE FROM origamies_index WHERE rowid = old.rowid;
 END;
 
-`;
-
-        db.exec(sql, (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        })
-    });
-}
+`
