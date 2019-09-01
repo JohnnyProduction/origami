@@ -1,0 +1,36 @@
+.root {
+    position: relative;
+}
+
+.tl {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.tr {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.bl {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.br {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+.h {
+    height: 2px;
+    width: 50%;
+}
+
+.v {
+    height: 50%;
+    width: 2px;
+}

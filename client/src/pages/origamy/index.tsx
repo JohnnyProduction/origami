@@ -3,6 +3,9 @@ import { Page } from "../../core/component/page";
 import { PageHeader, Text, PageTitle } from "../../core/component/typography";
 import styles from "./index.module.css";
 import { MAPI } from "../../mapi";
+import { Separator } from "../../core/component/separator";
+import { ImageWithFrame } from "../../core/component/image_with_frame";
+import { Direction } from "../../core/types/direction";
 
 const data = {
     name: "Базовая форма - Водяная бомба",
@@ -39,16 +42,12 @@ const data = {
 
 
 export class OrigamyPage extends React.Component {
-    public componentDidMount() {
-        // MAPI.Origamy.getById("6CTSxv8PPU").then(value => console.log(value));
-        // MAPI.Origamy.getByFilter({from: 0, to: 10}).then(value => console.log(value));
-    }
     public render() {
         return (
             <Page>
                 <section className={styles["origamy-page__section"]}>
                     <PageHeader>{data.name}</PageHeader>
-                    <img className={styles["origamy-page__photo"]} src={data.photo}></img>
+                    <ImageWithFrame className={styles["origamy-page__photo"]} imageClassName={styles["origamy-page__photo__image"]} src={data.photo} />
                     <Text>{data.description}</Text>
                 </section>
                 

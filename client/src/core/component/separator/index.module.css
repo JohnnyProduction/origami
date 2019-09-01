@@ -1,0 +1,71 @@
+.root {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.l_1 {
+    background-color: #37474F;
+    border-radius: 1px;
+
+    height: 100%;
+    width: 24%;
+}
+
+.l_2 {
+    background-color: #37474F;
+    border-radius: 1px;
+
+    height: 100%;
+    width: 10%;
+}
+
+.l_3 {
+    background-color: #37474F;
+    border-radius: 1px;
+
+    height: 100%;
+    width: 5%;
+}
+
+.l_4 {
+    background-color: #37474F;
+    border-radius: 1px;
+
+    height: 100%;
+    width: 1%;
+}
+
+.clearfix {
+    width: 40%;
+    height: 40%;
+}
+
+.up {
+    flex-direction: column-reverse;
+}
+
+.down {
+    flex-direction: column;
+}
+
+.left {
+    flex-direction: row-reverse;
+}
+
+.up .l_1, .down .l_1 {
+    width: 100%;
+    height: 24%;
+}
+.up .l_2, .down .l_2 {
+    width: 100%;
+    height: 10%;
+}
+.up .l_3, .down .l_3 {
+    width: 100%;
+    height: 5%;
+}
+.up .l_4, .down .l_4 {
+    width: 100%;
+    height: 1%;
+}
